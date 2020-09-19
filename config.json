@@ -1,0 +1,13 @@
+{
+    "debugmode": false,
+    "privatemode": false,
+    "customclientid": "",
+    "customapps":{
+        "coolapp1":{
+            "app": "explorer.exe",
+            "apptitle": "File Explorer",
+            "appdesc": "Looking for files...",
+            "largeimagename": "desktop"
+        }
+    }
+}
