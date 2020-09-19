@@ -58,7 +58,18 @@ and what the custom app object values mean
 Well, this is awkward :/
 
 ### Package is missing
-Run `getpackage.bat`, and then you should be able to run start.js
+
+Open Command Prompt
+
+Navigate to your folder containing `start.js` (EX: `cd D:/DestopRPC`)
+
+Run the following commands
+
+`npm install active-win`
+
+`npm install discord-rpc`
+
+Then try running again.
 
 ### An error was returned
 Report it on the [issues page](https://github.com/200Tigersbloxed/DesktopRPC/issues).
