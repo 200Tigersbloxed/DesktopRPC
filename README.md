@@ -47,8 +47,11 @@ What a custom app object looks like
 and what the custom app object values mean
 
 `app (string)` - EXACT name of the executable
+
 `apptitle (string)` - Title of the App
+
 `appdesc (string)` - Description for the App
+
 `largeimagename (string)` - Name of the Rich Presence Asset
 
 > ## Troubleshooting
