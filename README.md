@@ -2,7 +2,8 @@
 Discord Rich Presence for your whole PC
 
 > ## Setup
-Windows, Mac, and Linux are supported
+Windows is supported
+Mac and Linux are Untested
 
 ### Perquisites
 + [NodeJS](https://nodejs.org/en/)
