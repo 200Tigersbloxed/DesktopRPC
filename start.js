@@ -40,6 +40,15 @@ function privateString(inputDesc){
     return inputDesc
 }
 
+function checkPassthrough(appname){
+    for(var k in config.passthrough){
+        if(config.passthrough[k] == appname){
+            return true
+        }
+    }
+    return false
+}
+
 async function getAppInfo(currentappSC){
     //debug
     if(debugmode){
@@ -109,10 +118,6 @@ async function getAppInfo(currentappSC){
             var appdescSC = (await apptitleSC.split('-')[0])
             appinfo = ['Chrome', 'chrome', 'Browsing ' + appdescSC]
             break
-        case "ApplicationFrameHost.exe":
-            var appdescSC = (await apptitleSC.split('-')[0])
-            appinfo = ['Edge', 'edge', 'Browsing ' + appdescSC]
-            break
         case "msedge.exe":
             var appdescSC = (await apptitleSC.split('-')[0])
             appinfo = ['Edge', 'msedge', 'Browsing ' + appdescSC]
@@ -141,81 +146,87 @@ async function setActivity() {
     var previousCURRENTAPP = currentapp;
     var previousDESC = appdesc;
     currentapp = (await activeWin()).owner.name
-    if(apptitle !== (await activeWin()).title){
-        var appinfo = (await getAppInfo(currentapp))
+    var appIsNotPassThrough = checkPassthrough(currentapp)
+    if(!appIsNotPassThrough){
+        if(apptitle !== (await activeWin()).title){
+            var appinfo = (await getAppInfo(currentapp))
 
-        if(debugmode){
-            console.log(appinfo[0] + " " + appinfo[1] + " " + appinfo[2])
-        }
+            if(debugmode){
+                console.log(appinfo[0] + " " + appinfo[1] + " " + appinfo[2])
+            }
 
-        apptitle = appinfo[0]
-        appimage = appinfo[1]
-        appdesc = appinfo[2]
+            apptitle = appinfo[0]
+            appimage = appinfo[1]
+            appdesc = appinfo[2]
 
-        if(!isPrivateMode){
-            if(appimage !== "unknown"){
-                if(appdesc != previousDESC){
-                    var epoch = Date.now();
-                    rpc.setActivity({
-                        details: apptitle,
-                        state: privateString(appdesc),
-                        largeImageKey: appimage,
-                        largeImageText: privateString(currentapp),
-                        smallImageKey: getOperatingSystem().toLowerCase(),
-                        smallImageText: getOperatingSystem(),
-                        startTimestamp: epoch,
-                        instance: false,
-                    });
+            if(!isPrivateMode){
+                if(appimage !== "unknown"){
+                    if(appdesc != previousDESC){
+                        var epoch = Date.now();
+                        rpc.setActivity({
+                            details: apptitle,
+                            state: privateString(appdesc),
+                            largeImageKey: appimage,
+                            largeImageText: privateString(currentapp),
+                            smallImageKey: getOperatingSystem().toLowerCase(),
+                            smallImageText: getOperatingSystem(),
+                            startTimestamp: epoch,
+                            instance: false,
+                        });
+                    }
+                }
+                else{
+                    if(currentapp != previousCURRENTAPP){
+                        var epoch = Date.now();
+                        rpc.setActivity({
+                            details: privateString(currentapp),
+                            state: "App not Supported",
+                            largeImageKey: 'desktop',
+                            largeImageText: 'Unsupported App',
+                            smallImageKey: getOperatingSystem().toLowerCase(),
+                            smallImageText: getOperatingSystem(),
+                            startTimestamp: epoch,
+                            instance: false,
+                        });
+                    }
                 }
             }
             else{
-                if(currentapp != previousCURRENTAPP){
-                    var epoch = Date.now();
-                    rpc.setActivity({
-                        details: privateString(currentapp),
-                        state: "App not Supported",
-                        largeImageKey: 'desktop',
-                        largeImageText: 'Unsupported App',
-                        smallImageKey: getOperatingSystem().toLowerCase(),
-                        smallImageText: getOperatingSystem(),
-                        startTimestamp: epoch,
-                        instance: false,
-                    });
+                if(appimage != "unknown"){
+                    if(currentapp != previousCURRENTAPP){
+                        var epoch = Date.now();
+                        rpc.setActivity({
+                            details: apptitle,
+                            state: privateString(appdesc),
+                            largeImageKey: appimage,
+                            largeImageText: privateString(currentapp),
+                            smallImageKey: getOperatingSystem().toLowerCase(),
+                            smallImageText: getOperatingSystem(),
+                            startTimestamp: epoch,
+                            instance: false,
+                        });
+                    }
+                }
+                else{
+                    if(currentapp != previousCURRENTAPP){
+                        var epoch = Date.now();
+                        rpc.setActivity({
+                            details: privateString(currentapp),
+                            state: "App not Supported",
+                            largeImageKey: 'desktop',
+                            largeImageText: 'Unsupported App',
+                            smallImageKey: getOperatingSystem().toLowerCase(),
+                            smallImageText: getOperatingSystem(),
+                            startTimestamp: epoch,
+                            instance: false,
+                        });
+                    }
                 }
             }
         }
-        else{
-            if(appimage != "unknown"){
-                if(currentapp != previousCURRENTAPP){
-                    var epoch = Date.now();
-                    rpc.setActivity({
-                        details: apptitle,
-                        state: privateString(appdesc),
-                        largeImageKey: appimage,
-                        largeImageText: privateString(currentapp),
-                        smallImageKey: getOperatingSystem().toLowerCase(),
-                        smallImageText: getOperatingSystem(),
-                        startTimestamp: epoch,
-                        instance: false,
-                    });
-                }
-            }
-            else{
-                if(currentapp != previousCURRENTAPP){
-                    var epoch = Date.now();
-                    rpc.setActivity({
-                        details: privateString(currentapp),
-                        state: "App not Supported",
-                        largeImageKey: 'desktop',
-                        largeImageText: 'Unsupported App',
-                        smallImageKey: getOperatingSystem().toLowerCase(),
-                        smallImageText: getOperatingSystem(),
-                        startTimestamp: epoch,
-                        instance: false,
-                    });
-                }
-            }
-        }
+    }
+    else{
+        rpc.clearActivity()
     }
 }
 
