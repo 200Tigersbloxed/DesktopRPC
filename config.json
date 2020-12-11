@@ -9,5 +9,9 @@
             "appdesc": "Looking for files...",
             "largeimagename": "desktop"
         }
+    },
+    "passthrough":{
+        "app1": "App1.exe",
+        "app2": "App2.app"
     }
 }
