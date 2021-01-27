@@ -49,6 +49,17 @@ function checkPassthrough(appname){
     return false
 }
 
+function customappValuesCheck(val, activeWinInfo){
+    switch(val){
+        case "$windowtitle":
+            return activeWinInfo.title
+            break
+        default:
+            return val
+            break
+    }
+}
+
 async function getAppInfo(currentappSC){
     //debug
     if(debugmode){
@@ -58,7 +69,8 @@ async function getAppInfo(currentappSC){
 
     // apptitle, appimage, appdesc
     var appinfo = ['unknown', 'unknown', 'unknown']
-    var apptitleSC = (await activeWin()).title
+    var activeWinInfo = (await activeWin())
+    var apptitleSC = activeWinInfo.title
 
     switch(currentappSC){
         // editing applications
@@ -135,7 +147,7 @@ async function getAppInfo(currentappSC){
         for(var key in config.customapps){
             if(config.customapps[key].app == currentappSC){
                 var targetconf = config.customapps[key]
-                appinfo = [targetconf.apptitle, targetconf.largeimagename, targetconf.appdesc]
+                appinfo = [customappValuesCheck(targetconf.apptitle, activeWinInfo), targetconf.largeimagename, customappValuesCheck(targetconf.appdesc, activeWinInfo)]
             }
         }
     }
