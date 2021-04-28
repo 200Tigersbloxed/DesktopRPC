@@ -1,12 +1,11 @@
 # DesktopRPC
 Discord Rich Presence for your whole PC
 
-**DOCUMENTATION HERE IS DEPRECATED**
-Please go [here](https://docs.fortnite.lol/en/desktoprpc) for future documentation.
-
 > ## Setup
 Windows is supported
 Mac and Linux are Untested
+
+https://github.com/200Tigersbloxed/DesktopRPC/wiki/Setup
 
 ### Perquisites
 + [NodeJS](https://nodejs.org/en/)
